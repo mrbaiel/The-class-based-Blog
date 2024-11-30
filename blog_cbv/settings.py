@@ -14,7 +14,7 @@ from email.policy import default
 from decouple import config
 from pathlib import Path
 
-from django.conf.global_settings import STATIC_ROOT, MEDIA_ROOT, MEDIA_URL
+from django.conf.global_settings import STATIC_ROOT, MEDIA_ROOT, MEDIA_URL, TEMPLATES, STATICFILES_DIRS
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -27,7 +27,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('SECRET_KEY', default='unsafe-default-key')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config('DEGUG', default=False, cast=bool)
+DEBUG = config('DEBUG', default=False, cast=bool)
 
 ALLOWED_HOSTS = []
 
@@ -62,7 +62,7 @@ ROOT_URLCONF = "blog_cbv.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [BASE_DIR / 'templates'],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -124,10 +124,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = "/static/"
-STATIC_ROOT = (BASE_DIR / 'static')
+STATICFILES_DIRS = [BASE_DIR / 'static']
+STATIC_ROOT = (BASE_DIR / 'staticfiles')
 
-MEDIA_ROOT = (BASE_DIR / 'media')
 MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"

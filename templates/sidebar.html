@@ -1,10 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% load mptt_tags %}
+
+<div class="card mb-4">
+    <div class="card-header">Категории</div>
+    <div class="card-body">
+        {% full_tree_for_model blog.Category as categories %}
+        <ul class="list-group">
+            {% recursetree categories %}
+                <li class="list-group-item">
+                    <a href="{{ node.get_absolute_url }}">{{ node.title }}</a>
+                </li>
+                {% if not node.is_leaf_node %}
+                    <ul>
+                {% endif %}
+                {{ children }}
+                {% if not node.is_leaf_node %}
+                    </ul>
+                {% endif %}
+            {% endrecursetree %}
+        </ul>
+    </div>
+</div>
