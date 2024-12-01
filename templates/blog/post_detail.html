@@ -1,17 +1,22 @@
 {% extends 'main.html' %}
 
 {% block content %}
-<div class="card shadow-sm">
-    <img src="{{ post.thumbnail.url }}" class="card-img-full img-fluid" alt="{{ post.title }}">
+<div class="card shadow-sm mt-4">
+    <img src="{{ post.thumbnail.url }}" class="img-fluid w-100" alt="{{ post.title }}" style="object-fit: contain; max-height: 500px;">
+
+    <!-- Секция контента -->
     <div class="card-body">
-        <h5 class="card-title">
-            {{ post.title }}
-        </h5>
-        <p class="card-text">{{ post.description }}</p>
-        <p class="card-text">{{ post.text }}</p>
+        <h2 class="card-title text-primary mb-3">{{ post.title }}</h2>
+        <p class="card-text font-italic text-muted">{{ post.description }}</p>
+        <hr>
+        <div class="card-text">
+            {{ post.text|linebreaks }}
+        </div>
     </div>
-    <div class="card-footer text-muted">
-        Добавлено {{ post.create }} | Автор: {{ post.author.username }}
+
+    <!-- Футер карточки -->
+    <div class="card-footer text-muted text-end">
+        Добавлено {{ post.create|date:"d M Y H:i" }} | Автор: {{ post.author.username }}
     </div>
 </div>
 {% endblock %}

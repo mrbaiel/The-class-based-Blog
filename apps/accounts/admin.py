@@ -1,3 +1,10 @@
 from django.contrib import admin
 
-# Register your models here.
+from apps.accounts.models import Profile
+
+
+@admin.register(Profile)
+class ProfileAdmin(admin.ModelAdmin):
+    list_display = ('user', 'birth_data', 'slug')
+    list_display_links = ('user', 'slug')
+    prepopulated_fields ={'slug': ('user',)}
