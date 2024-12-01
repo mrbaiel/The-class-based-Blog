@@ -10,6 +10,13 @@ from mptt.models import MPTTModel
 from apps.services.utils import unique_slugify
 
 
+class PostManager(models.Manager):
+    """
+    Кастомный менеджер постов
+    """
+    def get_queryset(self):
+        return super().get_queryset().select_related("author","category").filter(status='published')
+
 class Post(models.Model):
     """
     Модель постов для нашего блога
@@ -42,6 +49,8 @@ class Post(models.Model):
                                 related_name='updater_posts', blank=True)
     fixed = models.BooleanField(verbose_name='Прикреплено', default=False)
     category = TreeForeignKey('Category', on_delete=models.PROTECT, related_name='posts', verbose_name='Категория')
+    objects = models.Manager()
+    custom = PostManager()
 
     class Meta:
         db_table = 'blog_post'
@@ -101,3 +110,5 @@ class Category(MPTTModel):
 
     def __str__(self):
         return self.title
+
+
