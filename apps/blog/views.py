@@ -1,11 +1,12 @@
 from lib2to3.fixes.fix_input import context
 
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, CreateView
 
 from django.shortcuts import render
 from django.views.generic import RedirectView
 from unicodedata import category
 
+from apps.blog.forms import PostCreateForm
 from apps.blog.models import Post, Category
 
 
@@ -37,7 +38,7 @@ class PostFromCategory(ListView):
     template_name = 'blog/post_list.html'
     context_object_name = 'posts'
     category = None
-    paginate_by = 6
+    paginate_by = 8
 
     def get_queryset(self):
         self.category = Category.objects.get(slug=self.kwargs['slug'])
@@ -51,3 +52,17 @@ class PostFromCategory(ListView):
         context = super().get_context_data(**kwargs)
         context['title'] = f'Записи категорий: {self.category.title}'
         return context
+
+class PostCreateView(CreateView):
+    model = Post
+    template_name = 'blog/post_create.html'
+    form_class = PostCreateForm
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Добавление статьи на сайт'
+        return context
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)

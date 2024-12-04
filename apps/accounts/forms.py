@@ -7,10 +7,10 @@ class UserUpdateForm(forms.ModelForm):
     """
     Форма для обновления пользователя
     """
-    username = forms.CharField(max_length=100, widget=forms.TextInput(attrs={"class":"form-control mb-1"}))
-    email = forms.EmailField(widget=forms.TextInput(attrs={"class":"form-control mb-1"}))
-    first_name = forms.CharField(max_length=40, widget=forms.TextInput(attrs={"class": "form-control mb-1"}))
-    last_name = forms.CharField(max_length=50, widget=forms.TextInput(attrs={"class":"form-control mb-1"}))
+    username = forms.CharField(required=False, max_length=100, widget=forms.TextInput(attrs={"class":"form-control mb-1"}))
+    email = forms.EmailField(required=False, widget=forms.TextInput(attrs={"class":"form-control mb-1"}))
+    first_name = forms.CharField(required=False, max_length=40, widget=forms.TextInput(attrs={"class": "form-control mb-1"}))
+    last_name = forms.CharField(required=False, max_length=50, widget=forms.TextInput(attrs={"class":"form-control mb-1"}))
 
     class Meta:
         model = User
