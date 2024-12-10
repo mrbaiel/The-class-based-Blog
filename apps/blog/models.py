@@ -1,5 +1,3 @@
-from PIL import Image
-
 from django.core.validators import FileExtensionValidator
 from django.db import models
 from django.contrib.auth.models import User
@@ -132,7 +130,7 @@ class Comment(MPTTModel):
 
     class MTTMeta:
         """
-        Сортировка по вложенности
+        Сортировуем по вложенносит
         """
         order_insertion_by = ('-time_create',)
 

@@ -6,6 +6,7 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView
 
 from apps.blog.forms import PostCreateForm, PostUpdateForm
 from apps.blog.models import Post, Category
+from apps.services.mixins import AuthorRequiredMixin
 
 
 class PostListView(ListView):
@@ -67,7 +68,7 @@ class PostCreateView(LoginRequiredMixin,CreateView):
         form.save()
         return super().form_valid(form)
 
-class PostUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+class PostUpdateView(SuccessMessageMixin, UpdateView, AuthorRequiredMixin):
     model = Post
     template_name = 'blog/post_update.html'
     context_object_name = 'post'
@@ -81,6 +82,6 @@ class PostUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
         return context
 
     def form_valid(self, form):
-        # form.instance.updater = self.request.user
+        form.instance.updater = self.request.user
         form.save()
         return super().form_valid(form)

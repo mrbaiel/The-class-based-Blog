@@ -1,4 +1,5 @@
 from django import forms
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from .models import Profile
 
@@ -32,3 +33,37 @@ class ProfileUpdateForm(forms.ModelForm):
         fields = ("slug", "birth_data", "bio", "avatar")
 
 
+class UserRegisterForm(UserCreationForm):
+    """
+    Тут предопределилили род класс
+    """
+    class Meta(UserCreationForm.Meta):
+        fields = UserCreationForm.Meta.fields + ('email', 'first_name', 'last_name')
+
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if email and User.objects.filter(email=email).exists():
+            raise forms.ValidationError('Этот email уже используется')
+        return email
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(self, *args, **kwargs)
+        self.fields['username'].widget.attrs.update({"placeholder": "Придумайте логин"})
+        self.fields['first_name'].widget.attrs.update({"placeholder": "Ваше имя"})
+        self.fields['last_name'].widget.attrs.update({"placeholder": "Ваша фамилию"})
+        self.fields['email'].widget.attrs.update({"placeholder": "Введите email"})
+        self.fields['password1'].widget.attrs.update({"placeholder": "Придумайте свой пароль"})
+        self.fields['password2'].widget.attrs.update({"placeholder": "Повторите придуманный пароль"})
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({"class": "form-control", "autocomplete": "off"})
+
+
+class UserLoginForm(AuthenticationForm):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(self, *args, **kwargs)
+        self.fields['username'].widget.attrs['placeholder'] = "Логин"
+        self.fields['password'].widget.attrs['placeholder'] = "Пароль"
+        self.fields['username'].label = "Логин"
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({'class': 'form-control', 'autocomplete': 'off'})
