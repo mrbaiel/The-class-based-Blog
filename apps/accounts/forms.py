@@ -35,7 +35,7 @@ class ProfileUpdateForm(forms.ModelForm):
 
 class UserRegisterForm(UserCreationForm):
     """
-    Тут предопределилили род класс
+    Тут предопределилили род. класс
     """
     class Meta(UserCreationForm.Meta):
         fields = UserCreationForm.Meta.fields + ('email', 'first_name', 'last_name')
@@ -47,7 +47,7 @@ class UserRegisterForm(UserCreationForm):
         return email
 
     def __init__(self, *args, **kwargs):
-        super().__init__(self, *args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.fields['username'].widget.attrs.update({"placeholder": "Придумайте логин"})
         self.fields['first_name'].widget.attrs.update({"placeholder": "Ваше имя"})
         self.fields['last_name'].widget.attrs.update({"placeholder": "Ваша фамилию"})
@@ -61,7 +61,7 @@ class UserRegisterForm(UserCreationForm):
 class UserLoginForm(AuthenticationForm):
 
     def __init__(self, *args, **kwargs):
-        super().__init__(self, *args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.fields['username'].widget.attrs['placeholder'] = "Логин"
         self.fields['password'].widget.attrs['placeholder'] = "Пароль"
         self.fields['username'].label = "Логин"

@@ -1,8 +1,6 @@
-
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
-
 
 from apps.blog.forms import PostCreateForm, PostUpdateForm
 from apps.blog.models import Post, Category
@@ -14,7 +12,7 @@ class PostListView(ListView):
     template_name = 'blog/post_list.html'
     context_object_name = 'posts'
     paginate_by = 6
-    queryset = Post.custom.all() #Предопределили вызов модели
+    queryset = Post.custom.all()  # Предопределили вызов модели
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -44,7 +42,7 @@ class PostFromCategory(ListView):
         queryset = Post.custom.filter(category__slug=self.category.slug)
         if not queryset:
             sub_cat = Category.objects.filter(parent=self.category)
-            queryset = Post.custom .filter(category__in=sub_cat)
+            queryset = Post.custom.filter(category__in=sub_cat)
         return queryset
 
     def get_context_data(self, *, object_list=None, **kwargs):
@@ -52,7 +50,8 @@ class PostFromCategory(ListView):
         context['title'] = f'Записи категорий: {self.category.title}'
         return context
 
-class PostCreateView(LoginRequiredMixin,CreateView):
+
+class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post
     template_name = 'blog/post_create.html'
     form_class = PostCreateForm
@@ -68,13 +67,14 @@ class PostCreateView(LoginRequiredMixin,CreateView):
         form.save()
         return super().form_valid(form)
 
+
 class PostUpdateView(SuccessMessageMixin, UpdateView, AuthorRequiredMixin):
     model = Post
     template_name = 'blog/post_update.html'
     context_object_name = 'post'
     form_class = PostUpdateForm
     login_url = 'home'
-    success_message =  'Запись обновлена успешно!!!'
+    success_message = 'Запись обновлена успешно!!!'
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -85,3 +85,4 @@ class PostUpdateView(SuccessMessageMixin, UpdateView, AuthorRequiredMixin):
         form.instance.updater = self.request.user
         form.save()
         return super().form_valid(form)
+

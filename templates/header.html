@@ -1,12 +1,12 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
-        <a class="navbar-brand fw-bold" href="/">Мой блог</a>
+        <a class="navbar-brand fw-bold" href="/">Инсан</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
+            <ul class="navbar-nav me-auto">
                 <li class="nav-item">
                     <a class="nav-link" href="/">Главная</a>
                 </li>
@@ -17,6 +17,30 @@
                     <a class="nav-link" href="/admin">Админка</a>
                 </li>
             </ul>
+            <div class="d-flex justify-content-end">
+                {% if request.user.is_authenticated %}
+                    <div class="dropdown text-end">
+                        <a href="#" class="d-block link-light text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                            {{ request.user }}
+                        </a>
+                        <ul class="dropdown-menu text-small dropdown-menu-end">
+                            <li><a class="dropdown-item" href="{% url 'post_create' %}">Добавить статью</a></li>
+                            <li><a class="dropdown-item" href="{% url 'profile_detail' request.user.profile.slug %}">Мой профиль</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <form action="{% url 'logout' %}" method="post">{% csrf_token %}
+                                    <a href="#" class="dropdown-item" onclick="parentNode.submit();">Выйти</a>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                {% else %}
+                    <ul class="nav">
+                        <li><a href="{% url 'register' %}" class="nav-link px-2 link-light">Регистрация</a></li>
+                        <li><a href="{% url 'login' %}" class="nav-link px-2 link-light">Вход</a></li>
+                    </ul>
+                {% endif %}
+            </div>
         </div>
     </div>
 </nav>

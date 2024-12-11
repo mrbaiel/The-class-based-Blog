@@ -1,8 +1,12 @@
-from django.urls import reverse_lazy
-from django.views.generic import DetailView, UpdateView
-from django.db import transaction
+from lib2to3.fixes.fix_input import context
 
-from apps.accounts.forms import ProfileUpdateForm, UserUpdateForm
+from django.contrib.auth.views import LoginView, LogoutView
+from django.urls import reverse_lazy
+from django.views.generic import DetailView, UpdateView, CreateView
+from django.db import transaction
+from django.contrib.messages.views import SuccessMessageMixin
+
+from apps.accounts.forms import ProfileUpdateForm, UserUpdateForm, UserLoginForm, UserRegisterForm
 from apps.accounts.models import Profile
 
 
@@ -48,3 +52,31 @@ class ProfileUpdateView(UpdateView):
 
     def get_success_url(self):
         return reverse_lazy('profile_detail', kwargs={'slug': self.object.slug})
+
+
+class UserRegisterView(CreateView, SuccessMessageMixin):
+    form_class = UserRegisterForm
+    success_url = reverse_lazy('home')
+    template_name = 'accounts/user_register.html'
+    success_message = 'Вы успешно зарегались!'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Регистрация на сайте'
+        return context
+
+
+class UserLoginView(LoginView, SuccessMessageMixin):
+    form_class = UserLoginForm
+    template_name = 'accounts/user_login.html'
+    next_page = 'home'
+    success_message = 'Добро пожаловать)'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Авторизация на сайте'
+        return context
+
+
+class UserLogoutView(LogoutView):
+    next_page = 'home'
