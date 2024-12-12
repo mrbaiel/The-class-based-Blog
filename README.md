@@ -41,4 +41,5 @@
 
 
 **User account details and change**
+
 <img width="730" alt="account_detail" src="https://github.com/user-attachments/assets/fadde5bb-73bc-4e74-8c0d-a624f64dbd17" />
