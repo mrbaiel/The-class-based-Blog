@@ -43,3 +43,8 @@
 **User account details and change**
 
 <img width="730" alt="account_detail" src="https://github.com/user-attachments/assets/fadde5bb-73bc-4e74-8c0d-a624f64dbd17" />
+
+
+**404 Error page**
+
+<img width="880" alt="404error" src="https://github.com/user-attachments/assets/80e3491b-4b00-40ac-b00d-d8c692b1c330" />
