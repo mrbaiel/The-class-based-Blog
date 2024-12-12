@@ -1,7 +1,9 @@
 from django.contrib.auth.models import User
+from django.core.cache import cache
 from django.core.validators import FileExtensionValidator
 from django.db import models
 from django.urls import reverse
+from django.views.defaults import server_error
 
 from apps.services.utils import unique_slugify
 
@@ -40,4 +42,13 @@ class Profile(models.Model):
         return self.user.username
 
     def get_ablosute_url(self):
-        return reverse('profile_detail', kwargs={'slug':self.slug})
+        return reverse('profile_detail', kwargs={'slug': self.slug})
+
+
+    def is_online(self):
+        cache_key = f"last-seen-{self.user.id}"
+        last_seen = cache.get(cache_key)
+
+        if last_seen is not None:
+            return True
+        return False

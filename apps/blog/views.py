@@ -1,7 +1,9 @@
+from lib2to3.fixes.fix_input import context
+
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.http import JsonResponse
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
 
 from apps.blog.forms import PostCreateForm, PostUpdateForm, CommentCreateForm
@@ -125,3 +127,32 @@ class CommentCreateView(CreateView, LoginRequiredMixin):
 
     def handle_no_permission(self):
         return JsonResponse('error', 'Необходимо войти в учетную заптсь для добавление комментария', status=400)
+
+
+def tr_handler404(request, exception):
+    return render(request=request, template_name='errors/error_page.html', status=404, context={
+        'title': 'Упс, страница не найдена(',
+        'error_message': 'Может быть страница перемещена или не найдена, не отчаивайтесь)'
+    })
+
+
+def tr_handler500(request):
+    return render(request=request,
+                  template_name='errors/error_page.html',
+                  status=500,
+                  context={
+                      'title': 'Ошибка на стороне сервера',
+                      'error_message': 'Вернитесь чуть позже)'
+                  })
+
+
+def tr_handler403(request, exception):
+    return render(
+        request=request,
+        template_name='errors/error_page.html',
+        status=403,
+        context={
+            'title': 'Ошибка доступа',
+            'error_message': 'Доступ к этой странице ограничен'
+        }
+    )

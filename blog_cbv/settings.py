@@ -30,7 +30,7 @@ RECAPTCHA_PRIVATE_KEY = config('RECAPTCHA_PRIVATE_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=False, cast=bool)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'blog.com']
 
 
 # Application definition
@@ -60,8 +60,16 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+
     "debug_toolbar.middleware.DebugToolbarMiddleware",
+    "apps.accounts.middleware.ActiveUserMiddleware",
 ]
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+        'LOCATION': (BASE_DIR / 'cache'),
+    }
+}
 
 ROOT_URLCONF = "blog_cbv.urls"
 
@@ -126,7 +134,7 @@ USE_TZ = True
 
 STATIC_URL = "/static/"
 STATIC_ROOT = (BASE_DIR / 'static')
-STATICFILES_DIRS = [BASE_DIR / 'templates/js']
+STATICFILES_DIRS = [BASE_DIR / 'staticfiles/js']
 
 MEDIA_URL = '/'
 MEDIA_ROOT = BASE_DIR

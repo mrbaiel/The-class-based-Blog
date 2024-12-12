@@ -10,10 +10,10 @@ class UserUpdateForm(forms.ModelForm):
     """
     Форма для обновления пользователя
     """
-    username = forms.CharField(required=False, max_length=100, widget=forms.TextInput(attrs={"class":"form-control mb-1"}))
-    email = forms.EmailField(required=False, widget=forms.TextInput(attrs={"class":"form-control mb-1"}))
+    username = forms.CharField(required=False, max_length=100, widget=forms.TextInput(attrs={"class": "form-control mb-1"}))
+    email = forms.EmailField(required=False, widget=forms.TextInput(attrs={"class": "form-control mb-1"}))
     first_name = forms.CharField(required=False, max_length=40, widget=forms.TextInput(attrs={"class": "form-control mb-1"}))
-    last_name = forms.CharField(required=False, max_length=50, widget=forms.TextInput(attrs={"class":"form-control mb-1"}))
+    last_name = forms.CharField(required=False, max_length=50, widget=forms.TextInput(attrs={"class": "form-control mb-1"}))
 
     class Meta:
         model = User
@@ -22,24 +22,24 @@ class UserUpdateForm(forms.ModelForm):
 
 class ProfileUpdateForm(forms.ModelForm):
     """
-    форма для обновления form
+    Форма для обновления профиля
     """
-    slug = forms.CharField(max_length=80, widget=forms.TextInput(attrs={"class":"form-control mb-1"}))
-    birth_date = forms.DateTimeField(widget=forms.TextInput(attrs={"class":"form-control mb-1"}))
-    bio = forms.CharField(max_length=500, widget=forms.Textarea(attrs={"class":"form-control mb-1"}))
-    avatar = forms.ImageField(widget=forms.FileInput(attrs={"class":"form-control mb-1"}))
-
+    slug = forms.CharField(max_length=80, widget=forms.TextInput(attrs={"class": "form-control mb-1"}))
+    birth_date = forms.DateField(widget=forms.TextInput(attrs={"class": "form-control mb-1", "type": "date"}))
+    bio = forms.CharField(max_length=500, widget=forms.Textarea(attrs={"class": "form-control mb-1"}))
+    avatar = forms.ImageField(widget=forms.FileInput(attrs={"class": "form-control mb-1"}))
 
     class Meta:
         model = Profile
-        fields = ("slug", "birth_data", "bio", "avatar")
+        fields = ("slug", "birth_date", "bio", "avatar")
 
 
 class UserRegisterForm(UserCreationForm):
     """
-    Тут предопределилили род. класс
+    Форма для регистрации пользователя
     """
     class Meta(UserCreationForm.Meta):
+        model = User
         fields = UserCreationForm.Meta.fields + ('email', 'first_name', 'last_name')
 
     def clean_email(self):
@@ -50,28 +50,33 @@ class UserRegisterForm(UserCreationForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['username'].widget.attrs.update({"placeholder": "Придумайте логин"})
-        self.fields['first_name'].widget.attrs.update({"placeholder": "Ваше имя"})
-        self.fields['last_name'].widget.attrs.update({"placeholder": "Ваша фамилию"})
-        self.fields['email'].widget.attrs.update({"placeholder": "Введите email"})
-        self.fields['password1'].widget.attrs.update({"placeholder": "Придумайте свой пароль"})
-        self.fields['password2'].widget.attrs.update({"placeholder": "Повторите придуманный пароль"})
-        for field in self.fields:
-            self.fields[field].widget.attrs.update({"class": "form-control", "autocomplete": "off"})
+        placeholders = {
+            'username': "Придумайте логин",
+            'first_name': "Ваше имя",
+            'last_name': "Ваша фамилия",
+            'email': "Введите email",
+            'password1': "Придумайте свой пароль",
+            'password2': "Повторите придуманный пароль",
+        }
+        for field, placeholder in placeholders.items():
+            self.fields[field].widget.attrs.update({
+                "class": "form-control",
+                "placeholder": placeholder,
+                "autocomplete": "off"
+            })
 
 
 class UserLoginForm(AuthenticationForm):
     recaptcha = ReCaptchaField()
 
-    class Meta:
-        model = User
-        fields = ['username', 'password', 'recaptcha']
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['username'].widget.attrs['placeholder'] = 'Логин пользователя'
-        self.fields['username'].widget.attrs['class'] = 'form-control'
-        self.fields['password'].widget.attrs['placeholder'] = 'Пароль пользователя'
-        self.fields['password'].widget.attrs['class'] = 'form-control'
+        self.fields['username'].widget.attrs.update({
+            "placeholder": "Логин пользователя",
+            "class": "form-control"
+        })
+        self.fields['password'].widget.attrs.update({
+            "placeholder": "Пароль пользователя",
+            "class": "form-control"
+        })
         self.fields['username'].label = 'Логин'
-
