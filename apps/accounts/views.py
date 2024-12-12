@@ -56,7 +56,7 @@ class ProfileUpdateView(UpdateView):
 
 class UserRegisterView(CreateView, SuccessMessageMixin):
     form_class = UserRegisterForm
-    success_url = reverse_lazy('home')
+    success_url = reverse_lazy('register')
     template_name = 'accounts/user_register.html'
     success_message = 'Вы успешно зарегались!'
 

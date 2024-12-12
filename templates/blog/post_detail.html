@@ -1,10 +1,10 @@
 {% extends 'main.html' %}
-
+{% load mptt_tags %}
 {% block content %}
 <div class="card shadow-sm mt-4">
     <img src="{{ post.thumbnail.url }}" class="img-fluid w-100" alt="{{ post.title }}" style="object-fit: contain; max-height: 500px;">
 
-    <!-- Секция контента -->
+    <!--  контент -->
     <div class="card-body">
         <h2 class="card-title text-primary mb-3">{{ post.title }}</h2>
         <p class="card-text font-italic text-muted">{{ post.description }}</p>
@@ -14,9 +14,17 @@
         </div>
     </div>
 
-    <!-- Футер карточки -->
+    <!-- Футер -->
     <div class="card-footer text-muted text-end">
         Добавлено {{ post.create|date:"d M Y H:i" }} | Автор: {{ post.author.username }}
+    </div>
+    <div class="card border-0">
+        <div class="card-body">
+            <h5 class="card-title">
+                Комментарии
+            </h5>
+            {% include 'comments/comments_list.html' %}
+        </div>
     </div>
 </div>
 {% endblock %}

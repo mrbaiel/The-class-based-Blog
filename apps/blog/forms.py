@@ -37,11 +37,15 @@ class PostUpdateForm(PostCreateForm):
 
 
 class CommentCreateForm(forms.ModelForm):
-    parent = forms.ImageField(widget=forms.HiddenInput, required=False)
+    parent = forms.ModelChoiceField(
+        queryset=Comment.objects.all(),
+        widget=forms.HiddenInput,
+        required=False
+    )
     content = forms.CharField(label='', widget=forms.Textarea(
         attrs={'cols': 30, 'rows': 5, 'placeholder': 'Комментарий', 'class': 'form-control'}
     ))
 
     class Meta:
         model = Comment
-        fields = ('content')
+        fields = ('content',)

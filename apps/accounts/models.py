@@ -12,7 +12,7 @@ class Profile(models.Model):
     avatar = models.ImageField(
         verbose_name='Аватарка',
         upload_to='images/avatars/%Y/%m/%d/',
-        default='images/avatars/default.jpg',
+        default='images/avatars/default.jpeg',
         blank=True,
         validators=[FileExtensionValidator(allowed_extensions=['jpeg', 'png', 'jpg'])]
     )

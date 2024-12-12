@@ -94,7 +94,7 @@ class CommentCreateView(CreateView, LoginRequiredMixin):
     form_class = CommentCreateForm
 
     def is_ajax(self):
-        return self.request.header.get('X-Requested-With') == 'XMLHttpRequest'
+        return self.request.headers.get('X-Requested-With') == 'XMLHttpRequest'
 
     def form_invalid(self, form):
         if self.is_ajax():
